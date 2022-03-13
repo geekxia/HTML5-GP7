@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    FirstName: <input type="text" v-model='first' ><br>
+    LastName: <input type="text" v-model='last' ><br>
+    <h1>全名是: <span v-text='full'></span></h1>
+    <hr>
+    <input type="text" v-model='full2' />
+    <hr>
+
+    <h1 v-text='count' @click='count++'></h1>
+    <div :style='ss'></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 计算属性 computed
+    // 作用1：把复杂的表示式从视图模板抽离出来，以便于视图代码的维护，提升可阅读性。
+    // 作用2：用计算属性封装业务方法，用在指令上。计算属性只有当与其相关的声明式变量变化时才会重新计算，所以这是一种性能优化。
+
+    // 特点1：计算属性要定义在computed中，它本质上一个函数。
+    // 特点2：计算属性可以当作一个响应式变量来使用，在js中使用this访问。
+    // 特点3：计算属性默认是get操作，所以计算属性可以用在指令上。
+    // 特点4：计算属性与多个声明式变量相关时，只要有任何一个声明式变量发生变化，计算属性都会重新进行计算；反之，与其相关的声明式变量没有变化，无论其它变量如何变量，当前计算属性不会重新运算。
+
+    // 特点5：计算属性还可以用在v-model上，但v-model还具有set功能，所以计算属性要拆成get/set的写法。
+
+    // 总结：当我们感觉指令上的表达式有点复杂时，建议将其封装成计算属性；当我们不得不在指令使用“函数调用”时，建议封装计算属性（不建议封装methods方法）。
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        first: '',
+        last: '',
+        count: 1,
+      },
+      computed: {
+        // 只具有get功能的计算属性
+        full () {
+          // do something
+          // 在更新阶段时，如果first和last不发生变化，其它任何声明式变量发生变化，full()都不会重新运算。
+          return this.first.toUpperCase() + '-' + this.last.toUpperCase()
+        },
+        // 具有get、set功能的计算属性
+        full2: {
+          get() { return `${this.first} ${this.last}`},
+          set(newVal) {
+            const arr = newVal.split(' ')
+            this.first = arr[0] || ''
+            this.last = arr[1] || ''
+          }
+        },
+        ss () {
+          console.log('我重新计算了')
+          return {
+            width: this.count*10+'px',
+            height: this.count*10+'px',
+            background: 'red'
+          }
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

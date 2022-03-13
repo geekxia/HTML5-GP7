@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <h1 v-qftext='count'></h1>
+    <button v-qfon:click.prevent='add'>自增</button>
+    <a href="http://baidu.com" v-qfon:click='skip'>百度</a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 自定义指令
+    // 本质：在当前项目中，有一类非常常用的与DOM相关的功能，我们建议使用Vue.directive()封装“自定义指令”。
+    // 语法：使用 Vue.directive() 或者 directives 选项来封装。
+
+    // 全局指令：一次定义，随处使用。
+    Vue.directive('qfon', {
+      inserted: function(el,binding){
+        console.log('el', el)
+        console.log('binding', binding)
+        el.addEventListener(binding.arg, function(ev){
+          if(binding.modifiers.prevent) {
+            ev.preventDefault()
+          }
+          // do something
+          binding.value(ev)
+        })
+      }
+    })
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        count: 0
+      },
+      // 局部指令：只能在当前组件中使用，不能跨组件使用。
+      directives: {
+        'qftext': function(el, binding) {
+          // console.log('el', el)
+          // console.log('binding', binding)
+          el.innerText = binding.value
+        }
+      },
+      methods: {
+        add() {
+          this.count++
+          console.log('add')
+        },
+        skip() { console.log('a clicked') }
+      }
+    })
+  </script>
+
+
+</body>
+</html>

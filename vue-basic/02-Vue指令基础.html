@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    [v-cloak] { display: none; }
+    .c1 { color: red; }
+    .c2 { color: green; }
+  </style>
+</head>
+<body>
+
+  <div id='app'>
+
+    <h1 v-text='name'></h1>
+    <h1 v-cloak>{{name}}</h1>
+    <hr>
+
+    <h1 v-text='foo'></h1>
+    <hr>
+
+    <div v-text='content'></div>
+    <div v-html='content'></div>
+    <hr>
+
+    <h1 v-once v-text='count'></h1>
+    <hr>
+
+    <h1 title='千锋'>欢迎学习HTML5</h1>
+    <h1 :title='title'>欢迎学习HTML5</h1>
+    <a :href='href'>跳转</a>
+    <div :class='cc'>我是一行可以变色的文字</div>
+
+    <div style='color:blue;'>静态的style</div>
+    <div :style='{color:"blue", fontSize: `${font}px`}'>动态的style</div>
+    <h1 :title='Math.random()*100'>动态的title</h1>
+    <h1 :title='Math.floor(initTitle()*100)'>动态的title</h1>
+    <hr>
+
+    <button @click='clickHandle'>点击</button><br>
+    <input type="text" @keyup.enter='search' />
+    <input type="text" @keyup.ctrl.space='search' />
+    <input type="checkbox" @click.prevent='checkHandle' /><br>
+    <a href='#' @click.prevent='skipEdit'>编辑</a>
+    <hr>
+
+    <div @click='rowClick($event, 1)'>第一行</div>
+    <div @click='rowClick($event, 2)'>第二行</div>
+    <hr>
+
+    任务名称：<input type="text" v-model.trim.number='task' @keyup.enter='add' /><br>
+    任务介绍：<textarea v-model.lazy='info' name="name" rows="5" cols="30"></textarea>
+    <hr>
+
+
+    <div v-for='(item, index) in list'>
+      <span v-text='index'></span>
+      -
+      <span v-text='item.name'></span>
+      -
+      <span v-text='item.age'></span>
+    </div>
+    <hr>
+
+    <div v-for='(item, index) in 5'>
+      <span v-text='index'></span>
+      -
+      <span v-text='item'></span>
+    </div>
+    <hr>
+
+    <div v-for='(item, index) in `hello`'>
+      <span v-text='index'></span>
+      -
+      <span v-text='item'></span>
+    </div>
+    <hr>
+
+    <div v-for='(v, k, index) in user' >
+      <span v-text='index'></span>
+      -
+      <span v-text='k'></span>
+      :
+      <span v-text='v'></span>
+    </div>
+    <hr>
+
+    <h2 v-show='bol'>请登录</h2>
+    <hr>
+
+    <h2 v-if='bol'>请登录</h2>
+    <hr>
+
+    <h2 v-if='bol'>太阳</h2>
+    <h2 v-else>月亮</h2>
+    <hr>
+
+    <h2 v-if='row===1'>第一行文字</h2>
+    <h2 v-else-if='row===2'>第二行文字</h2>
+    <h2 v-else>第三行文字</h2>
+    <hr>
+
+    <div v-pre>
+      <h2>{{count}}</h2>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 怎么理解指令？
+    // 1、指令是vue中的特色（在react没有），Angular、微信小程序也有指令。
+    // 2、指令的本质，就是DOM封装，就是你学过的DOM操作。
+    // 3、降低我们直接操作DOM的频率。（尽可能减少DOM操作，不推荐用户直接操作DOM）
+    // 4、指令如果有值，这个值是变量（变量必须在组件中能通过this访问）、也可以是表达式（由变量参与的计算）。
+
+    // 一、文本类指令
+
+    // 1、{{}} 文本插值。缺点是有“一闪而过”的效果（很丑）。使用v-text代替，或者使用v-cloak来解决。
+      // {{}}虽然可以用v-text代替，但有些场景下必须使用{{}}，所以{{}}的存在是合理的。
+      // 如果一定要使用{{}}，要使用 [v-cloak] { display:none; } 来解决一闪而过的问题。
+
+    // 2、v-text 专门用于渲染文本类的声明式变量，比如字符串、数值等。
+      // 如果渲染 null、undefined 是没有显示效果的。
+      // 如果渲染 布尔值，有显示效果，把布尔值隐式转化成了字符串。
+      // 进一步理解：v-text实际上是DOM中 innerText。
+
+    // 3、v-html 专门用于渲染HTML字符串。
+      // v-html的值是HTML字符串，这些字符会被浏览器渲染引擎渲染成真实的DOM结构。
+      // v-html默认具有“防注入攻击XSS”的功能，你可以放心地使用v-html。扩展：XSS是什么？
+
+    // 4、v-once
+      // 在语法层面上，v-once，和v-cloak一样，没有值，不能这么用：v-once='msg'
+      // 它有一个非常重要的特点，它所作用的DOM节点上的声明式变量，只渲染一次。换句说，它上面的声明变量发生变化时，视图不再更新了。
+      // 说明一下，这个指令在工作中几乎不用。
+
+
+    // 二、动态属性
+
+    // v-bind 给标签添加动态属性，凡是你可以使用的属性都可以变成动态的。
+      // 简写：v-bind:attr 可以简写成 :attr
+      // 进阶：使用v-bind实现动态class、动态style，是非常重要的，在“组件化”时用得非常多。
+
+
+    // 三、事件绑定
+
+    // v-on 给标签绑定事件（事件是网页交互的基础）。
+      // 可以哪些事件？什么事件都能绑定，比如鼠标事件、键盘事件、表单事件等。
+      // 简写：v-on:事件名='事件处理器' 简写成  @事件名='事件处理器'
+      // 事件修饰符（可以链式调用）：.enter / .stop / .prevent / ...
+
+      // 事件对象：（1）当没有事件传参时，事件处理器默认的第一个参数就是事件对象。当有事件传参时，要使用$event手动传递事件对象。
+        // 在什么场景下会使用事件传参？通常为了复用“事件处理器”。
+        // 语法1：没有事件传参时  <tag @click='handle'></tag>
+        // 语法2：有事件传参时  <tag @click='handle(变量1, $event, 变量2)'></tag>
+
+    // 四、表单绑定
+
+    // v-model 用于表单双向绑定，用人话讲，方便我们取表单值。
+      // 约定：一般我们谈论“双向绑定”指表单的v-model，谈论“响应式/声明式”指的是vue响应式原理。
+      // 怎么理解双向绑定？从表单的角度，当表单视图发生变化时，v-model所对应的声明式变量自动更新；反之，当v-model对应的声明式变量发生变化时，表单视图自动更新。
+      // 好处：有了v-model，我们取表单的值将变得非常简单。
+
+      // 三个表单修饰符：
+        // .trim  去掉文本类表单值的首尾字符串
+        // .number  用于把由数字组成的字符串，转化成Number类型。
+        // .lazy  用于“长表单”的v-model上。作用：当长表单光标失焦时，再把表单视图上的最新值更新到声明式变量。这是一种表单的性能优化。
+
+    // 五、列表循环
+
+    // v-for 常用于循环数组、数值、字符串、对象，一切可迭代的变量（比如Map、Set）
+      // Vue工作很少使用Map、Set，原因是Vue没有办法把Map、Set这类数据变成响应式数据。
+      // 提醒：在v-for中很少用于循环Map、Set结构。
+      // 说明：常用于循环数组、数值。
+      // 问题：v-for循环时要加key，后续再补充。
+
+    // 六、条件渲染
+
+    // v-show 用于对元素进行显示与隐藏
+      // 背后的原理是给元素节点添加或移除 'display:none' 来实现隐藏和显示的。
+      // 语法的坑：v-show='Boolean(表达式)'，v-show的值永远都是布尔值，一定要留意v-show值的数据类型。
+
+    // v-if / v-else-if / v-else  用于对元素进行显示与隐藏
+      // 背后的原理是通过DOM操作对元素节点进行插入或移除。
+      // 语法的坑：v-if='Boolean(表达式)'，v-if和v-else-if的值必须是布尔值，如果不是布尔值vue会自动隐式类型转换。
+      // 注意：当v-if/v-else-if/v-else成为“一组”时，在这一组兄弟节点之间不能插入其它任何节点。
+      // v-else 是不用给“值”的。
+
+    // 小结：使用v-show实现隐藏功能时，页面初始化的开销比较大。使用v-if实现隐藏功能时，页面初始化开销比较小。当一个元素节点需要频繁进行显示与隐藏，建议使用v-show来做；反之建议使用v-if来实现。
+
+    // 七、其它指令
+
+    // v-slot 插槽，是组件化的基础语法之一。它可以简写 #。
+    // v-pre  一般用于调试。特点：被v-pre所包裹的节点，都不再参与vue的编译与解析的。这个指令很少使用。
+
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        name: 'xiao wang',
+        foo: false,
+        content: '<a href="https://baidu.com">百度</a>',
+        count: 1,
+        title: 'qf',
+        href: 'https://mi.com',
+        cc: 'c1',
+        font: 30,
+        task: '',
+        info: '',
+        list: [
+          { id: 1, name: 'zhangsan', age: 10 },
+          { id: 2, name: 'lisi', age: 20 },
+          { id: 3, name: 'zhaoliu', age: 30 }
+        ],
+        user: {
+          name: 'zhangsan',
+          age: 30,
+          addr: '广东深圳'
+        },
+        bol: true,
+        row: 3       // “枚举”：数量有限并各不相同
+      },
+      methods: {
+        initTitle() {
+          return Math.random()*100
+        },
+        clickHandle() {
+          console.log('clicked')
+        },
+        search() {
+          console.log('开始搜索')
+        },
+        checkHandle() {
+          console.log('checkbox clicked')
+        },
+        skipEdit(ev) {
+          console.log('a clicked', ev)
+        },
+        rowClick(arg, ev) {
+          console.log('row clicked', arg, ev)
+        },
+        add() {
+          console.log('提交', this.task, typeof this.task)
+        }
+      }
+    })
+
+    setInterval(()=>{
+      console.log('info', app.info)
+    }, 500)
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<script>
+  // 建造者模式
+  // 注意：很容易被误解认为它和组合模式是相似的。
+  // 区别：建造者模式关注的对象的整个过程，而组合模式强调的是“整体和局部”之间的关系。
+
+  var Header = function(name) { this.name = name }
+  var Sider = function(name) { this.name = name }
+  var Content = function(name) { this.name = name }
+  var Footer = function(name) { this.name = name }
+
+  // 建造者：关于对象创建的整个过程
+  var Page = function(opt) {
+    this.header = new Header(opt.header)
+    this.sider = new Sider(opt.sider)
+    this.content = new Content(opt.content)
+    this.footer = new Footer(opt.footer)
+  }
+
+  var h5 = new Page({header:'navbar',sider:'drawer',content:'list',footer:'tabbar'})
+  var oa = new Page({header:'nav', sider:'element',content:'route',footer:'qf'})
+</script>

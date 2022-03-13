@@ -1,0 +1,48 @@
+{
+    "pages": [
+      "pages/index/index",
+        "pages/logs/logs",
+        "pages/find/find",
+        "pages/detail/detail"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "Weixin",
+        "navigationBarTextStyle": "black"
+    },
+    "style": "v2",
+    "sitemapLocation": "sitemap.json",
+    "lazyCodeLoading": "requiredComponents",
+    "tabBar": {
+        "color": "#333333",
+        "selectedColor": "#0000ff",
+        "backgroundColor": "#ffffff",
+        "borderStyle": "white",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "福利",
+                "iconPath": "assets/t1.png",
+                "selectedIconPath": "assets/t1-on.png"
+            },
+            {
+                "pagePath": "pages/find/find",
+                "text": "书城",
+                "iconPath": "assets/t2.png",
+                "selectedIconPath": "assets/t2-on.png"
+            },
+            {
+                "pagePath": "pages/logs/logs",
+                "text": "听书",
+                "iconPath": "assets/t3.png",
+                "selectedIconPath": "assets/t3-on.png"
+            }
+        ]
+    },
+    "permission": {
+        "scope.userLocation": {
+            "desc": "为了更好地提供服务，希望获取你的位置授权"
+        }
+    }
+}

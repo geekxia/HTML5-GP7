@@ -1,0 +1,32 @@
+#map {
+  position: absolute;
+  top:15px;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
+}
+
+.qf-teacher {
+  .search {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 0;
+    height: 32px;
+    z-index: 9999;
+    .ant-input {
+      display: inline-block;
+      width: 200px;
+    }
+  }
+  .result {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 150px;
+    background-color: white;
+    z-index: 9999;
+  }
+
+}

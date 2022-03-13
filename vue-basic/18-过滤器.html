@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    [v-cloak] { display: none; }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <h1 v-cloak>{{ good.price|price}}</h1>
+    <h1 v-cloak :title='no|stu'>{{no|stu}}</h1>
+    <h1 :title='handleStu(no)' v-text='handleStu(no)'></h1>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 过滤器
+    // 作用：用于对文本类的值（主要是String、Number）进行二次处理。
+    // 语法：过滤器只能用在 v-bind 或 {{}} 这两个指令中，例如 :xxx='xxx|f1|f2' 或 {{xxx|f1|f2}}。
+    // 提示：过滤器可以链式调用，但注意有先后顺序。
+
+    // 全局过滤器
+    Vue.filter('price', function(val) {
+      // do something
+      return '￥'+Number(val).toFixed(2)
+    })
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        good: {
+          price: 78.9
+        },
+        no: '202110900001'
+      },
+      // 局部过滤器
+      filters: {
+        stu(val) {
+          return 'SZ'+val
+        }
+      },
+      methods: {
+        handleStu(val) {
+          return 'SZ'+val
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<div id='box'>测试我的jq</div>
+
+<script>
+  // 外观模式：统一对外的表现。
+
+  var $1 = {
+    id: function(id) {
+      return document.getElementById(id)
+    },
+    tag: function(tagName) {
+      return document.getElementsByTagName(tagName)[0]
+    },
+    class: function(className) {
+      return document.getElementsByClassName(className)[0]
+    }
+  }
+</script>
+
+<script>
+  function jQuery() {
+    window.$ = this
+    this.dom = null
+  }
+  jQuery.prototype.id = function(id) {
+    this.dom = document.getElementById(id)
+    return this
+  }
+  jQuery.prototype.tag = function(tagName) {
+    this.dom = document.getElementsByTagName(tagName)[0]
+    return this
+  }
+  jQuery.prototype.class = function(className) {
+    this.dom = document.getElementsByClassName(className)[0]
+    return this
+  }
+  jQuery.prototype.background = function(color) {
+    this.dom.style.background = color
+  }
+  new jQuery()
+
+
+
+
+
+
+
+</script>

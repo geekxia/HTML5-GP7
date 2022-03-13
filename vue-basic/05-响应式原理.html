@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div>
+    <h1 id='h1'></h1>
+    <input id='ipt' type="text" />
+  </div>
+
+  <script>
+    // 响应式？vue可以监听一个变量的变化，当变量发生变化时，vue可以做一些工作。当面试官问响应式原理，到底问什么呢？问的是“vue是如何监听data选项上变量的变化的？”
+    // 双向绑定？专指vue表单的v-model。
+
+    // 总结：
+    // 1、要知道什么响应式？在vue2中响应式是如何实现的？
+    // 2、数据劫持？对data遍历、递归添加getter/setter。（Object.defineProperty()）
+    // 3、依赖收集？指令（节点、作用、上下文）和响应式数据第一次接触时进行收集。
+    // 4、Wacher，异步更新队列，完成最终的DOM更新。
+
+    // 想象这是new Vue({data:{}})
+    const data = {
+      count: 1,
+      name: 'xiaowang'
+    }
+    // 想象这是app实例（new Vue()）
+    const app = {}
+
+    // 当vue组件实例化时，对data选项上的数据进行劫持
+    Object.keys(data).forEach(ele=>{
+      Object.defineProperty(app, ele, {
+        get() { return data[ele] },
+        set(newVal) { data[ele]=newVal; Wacher('name') }
+      })
+    })
+
+    // 收集依赖
+    const dep = {
+      name: []
+    }
+
+    // 初始化：把那些响应式变量渲染到DOM上
+    function init() {
+      // 把声明式变量更新渲染到DOM上
+      // v-text
+      dep['name'].push(function(){
+        document.getElementById('h1').innerText = app.name
+      })
+      // v-model
+      dep['name'].push(function(){
+        document.getElementById('ipt').value = app.name
+      })
+
+      document.getElementById('ipt').addEventListener('input', function(ev){
+        app.name = ev.target.value
+        // 修改了name，这会触发set的执行
+      })
+      // 第一次更新DOM
+      Wacher('name')
+    }
+    init()
+
+    // 观察者，触发依赖收集异步执行、更新DOM。
+    function Wacher(k) {
+      dep[k].forEach(fn=>fn())
+    }
+  </script>
+
+  <script>
+    // js的普通对象天生就不具备响应式，它的变化，我们无法监听到。
+    const obj1 = {
+      a: 1,
+      b: 2
+    }
+
+    // vue2中，使用Object.defineProperty来实现响应式的。
+    // 使用 Object.defineProperty()给对象添加属性的同时，可以为属性添加getter/setter的钩子。当这个属性被访问时，get钩子会执行；当修改这个属性时，set钩子会执行。这不就是“响应”了吗？
+    const obj2 = {}
+    let a = 1
+    Object.defineProperty(obj2, 'a', {
+      get() {
+        console.log('有人访问了 obj1.a')
+        return a
+      },
+      set(newVal) {
+        console.log('有人修改了 obj2.a')
+        a = newVal
+      }
+    })
+  </script>
+</body>
+</html>

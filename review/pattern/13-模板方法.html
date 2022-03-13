@@ -1,0 +1,34 @@
+<script>
+  // 模板方法：对流程性的算法进行抽象封装。
+  // 一般的模板方法（类）都有抽象方法。
+  // 算法：把水烧开、冲咖啡、装杯、加佐料。
+
+  var DrinkTemplate = function() {}
+  DrinkTemplate.prototype.boil = function(val) {
+    console.log(`煮开水${val}升`)
+  }
+  DrinkTemplate.prototype.rush = function(name) {
+    console.log(`用开水冲${name}`)
+    this.name = name
+  }
+  DrinkTemplate.prototype.pour = function(cup) {
+    console.log(`把${this.name}倒入到${cup}`)
+    this.cup = cup
+  }
+  DrinkTemplate.prototype.add = function(some) {
+    console.log(`向${this.cup}中添加作料${some}`)
+  }
+  DrinkTemplate.prototype.init = function(val,name,cup,some) {
+    this.boil(val)
+    this.rush(name)
+    this.pour(cup)
+    this.add(some)
+  }
+
+  var Coffee = function() {
+    DrinkTemplate.call(this)
+  }
+  Coffee.prototype = new DrinkTemplate()
+
+  new Coffee().init(1,'猫屎咖啡','星巴克杯子','牛奶')
+</script>

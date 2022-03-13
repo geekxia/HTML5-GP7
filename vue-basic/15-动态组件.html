@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .tabbar {
+      position: fixed;
+      display: flex;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      line-height: 80px;
+      text-align: center;
+    }
+    .tabbar span {
+      flex: 1;
+      cursor: pointer;
+      border: 1px solid #ccc;
+    }
+    .tabbar span.on {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+
+    <div class="page">
+      <keep-alive>
+        <component :is='page'></component>
+      </keep-alive>
+    </div>
+
+    <div class="tabbar">
+      <span
+        v-for='tab in tabbar'
+        :class='{"on": page===tab.page}'
+        @click='page=tab.page'
+        v-text='tab.text'>
+      </span>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 动态组件 <keep-alive>
+    // 作用：使用<keep-alive>所包裹的组件，不会“死掉”，也就是不会进入销毁阶段。
+
+    // 1、<component is='组件名'>这个内置组件，经常根据条件(is的值)来显示指定的组件。
+    // 2、被<keep-alive>所包裹的组件，没有beforeDestroy/destroyed，但又增加了两个生命周期deactivated/activated。
+      // activated 当组件被激活时触发该生命周期，“激活”也叫做“进入前台”。
+      // deactivated 当组件被休眠时触发该生命周期，“休眠”也叫做“进入后台”。
+    // 3、created/mounted/activated 被<keep-alive>的组件，这三个生命周期要灵活使用。
+    // 4、beforeDestroy/destroyed/deactivated 被<keep-alive>的组件，这三个生命周期要灵活使用。
+
+    Vue.component('qf-home', {
+      template: `
+      <div>首页<input type="text" /></div>
+      `,
+      destroyed() { console.log('qf-home destroyed')},
+      activated() { console.log('qf-home 进入了前台')},
+      deactivated() { console.log('qf-home 进入了后台')}
+    })
+
+    Vue.component('qf-find', {
+      template: `
+      <div>发现<input type="text" /></div>
+      `,
+      destroyed() { console.log('qf-find destroyed')}
+    })
+
+    Vue.component('qf-user', {
+      template: `
+      <div>个人中心<input type="text" /></div>
+      `,
+      destroyed() { console.log('qf-user destroyed')}
+    })
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        tabbar: [
+          { id: 1, text: '首页', page: 'qf-home' },
+          { id: 2, text: '发现', page: 'qf-find' },
+          { id: 3, text: '我的', page: 'qf-user' }
+        ],
+        page: 'qf-home'
+      }
+    })
+  </script>
+
+</body>
+</html>

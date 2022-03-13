@@ -1,0 +1,38 @@
+<script>
+  // 抽象工厂：实现抽象类，并实现对抽象类的继承。
+  // 相当于是面向对象编程中的 extends 
+  var AbstractFactory = function(subC, supC) {
+    if (typeof supC === 'function') {
+      function F() {}   // 临时容器
+      F.prototype = new supC()
+      subC.prototype = new F()
+      subC.prototype.constructor = F
+    } else {
+      throw new Error('你要继承的父类不存在')
+    }
+  }
+  // 模拟一个抽象类：抽象类被子类继承时，必须实现抽象类中的抽象方法
+  var Person = function(name) {
+    this.name = name
+  }
+  Person.prototype.work = function() {
+    throw new Error('我是抽象类的抽象方法，你必须先实现我')
+  }
+  Person.prototype.run = function() {
+    throw new Error('我是抽象类的抽象方法，你必须先实现我')
+  }
+
+  // 需求：让Man这个继承自Person这个抽象类
+  var Man = function() {}
+  AbstractFactory(Man, Person)
+  // 因为继承了抽象类，所以我要实现这个抽象类中的所有抽象方法
+  Man.prototype.work = function() {
+    console.log('实现Person的work', '我的work')
+  }
+  Man.prototype.run = function() {
+    console.log('实现Person的run', '我的run')
+  }
+
+  var zs = new Man()
+
+</script>

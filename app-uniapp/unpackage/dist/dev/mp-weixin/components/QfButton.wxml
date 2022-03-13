@@ -1,0 +1,1 @@
+<button data-event-opts="{{[['tap',[['$emit',['qfclick',100]]]]]}}" bindtap="__e" class="data-v-22d2cafc">{{text}}</button>

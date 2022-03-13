@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .xxx-enter {color: red; opacity:0; font-size:12px; }
+    .xxx-enter-active { transition: all ease 2s; }
+    .xxx-enter-to {color:black; opacity:1; font-size: 60px;}
+
+    .xxx-leave {color:black; opacity:1; font-size: 60px;}
+    .xxx-leave-active {transition: all ease 2s;}
+    .xxx-leave-to {color:blue; opacity:0; font-size:12px;}
+  </style>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- 使用自定义动画 -->
+    <transition name='xxx'>
+      <h1 v-if='bol'>我是一个可有可无的人</h1>
+    </transition>
+    <button @click='bol=!bol'>显示/隐藏</button>
+    <hr>
+
+    <!-- 使用第三方动画库 -->
+    <transition
+      enter-active-class='animate__animated animate__bounceIn'
+      leave-active-class='animate__animated animate__bounceOut'
+    >
+      <h1 v-show='show'>我是一个可有可无的人</h1>
+    </transition>
+    <button @click='show=!show'>显示/隐藏</button>
+    <hr>
+
+    <!-- 对多节点执行过渡动画 -->
+    <transition
+      enter-active-class='animate__animated animate__fadeInBottomRight'
+      leave-active-class='animate__animated animate__fadeOutBottomLeft'
+      mode='out-in'
+    >
+      <h1 key='0' v-if='idx===0'>我是第一行文字</h1>
+      <h1 key='1' v-else-if='idx===1'>我是第二行文字</h1>
+      <h1 key='2' v-else>我是第三行文字</h1>
+    </transition>
+    <button @click='idx=((++idx)%3)'>循环显示</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 过渡动画
+    // 作用：一般在做用户体验开发时才用得到。一般用于给元素的显示、隐藏、列表变化添加动画。
+    // 技术：<transition> <transition-group>这两个内置组件
+    // 做法：把<transition>包裹在目标元素，用name属性并指定动画名称即可。
+
+    // 1、如何定义“动画名字”？.x-enter/.x-enter-active/.x-enter-to/.x-leave/.x-leave-active/.x-leave-to，这个'x'就是“动画名称”，用在<transition name='x'>
+    // 2、上述六个类名，有“四个时刻、两个过程”，我们工作一般只考虑“两个过程”，不考虑“四个时刻”。
+
+    // 3、如果我们不想自己编写动画，如何使用第三方css动画呢？我们以animate.css为例来例来讲解。
+      // enter-active-class 该属性用于指定进入动画的css类名
+      // leave-active-class 该属性用于指定离开动画的css类名
+
+    // 4、<transition>对多个节点执行过渡动画，要给每个节点添加唯一的key，否则动画不会生效。
+      // mode='in-out' 要进入的元素先执行进入动画
+      // mode='out-in' 要离开的元素先执行离开动画
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        bol: true,
+        show: true,
+        idx: 0
+      }
+    })
+  </script>
+
+</body>
+</html>

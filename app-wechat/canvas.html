@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    /* .map {
+      width: 500px;
+      height: 500px;
+      border: 1px solid blue;
+    } */
+  </style>
+</head>
+<body>
+
+  <canvas id='map' class="map" width='800' height='500'></canvas>
+
+  <script>
+    var canvas = document.getElementById('map')
+    var ctx = canvas.getContext('2d')
+    ctx.strokeStyle = 'red'
+    // ctx.textAlign = 'center'
+    ctx.strokeText('千锋你好', 400, 30, 800)
+
+    ctx.fillStyle = 'blue'
+    ctx.fillRect(280, 60, 100, 100)
+
+  </script>
+
+</body>
+</html>

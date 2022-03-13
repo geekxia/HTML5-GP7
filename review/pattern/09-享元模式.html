@@ -1,0 +1,26 @@
+<script>
+  // 享元模式：把多个模块中相同的东西抽离出来，变成享元
+
+  var Flyweight = function(x,y,color) {
+    this.x = x
+    this.y = y
+    this.color = color
+  }
+  Flyweight.prototype.draw = function() {
+    console.log('画了一个形状', this)
+  }
+
+  var Circle = function(radius) {
+    this.radius = radius
+  }
+  Circle.prototype = new Flyweight(1,2,'red')
+
+  var Rectangle = function(width, height) {
+    this.width = width
+    this.height = height
+  }
+  Rectangle.prototype = new Flyweight(10,20,'green')
+
+  var cc = new Circle(3)
+  var rr = new Rectangle(30,40)
+</script>

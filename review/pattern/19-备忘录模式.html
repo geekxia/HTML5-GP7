@@ -1,0 +1,35 @@
+<script>
+  // 备忘录模式：用于数据的缓存。
+
+  var Memento = function() {
+    var cache = {}
+    return function(tab, fn, request) {
+      // 如果被访问的数据在备忘录中有，直接fn渲染
+      // 如果被访问的数据在备忘录中没有，先调异步接口再fn渲染。
+      if (cache[tab]) {
+        fn(cache[tab])
+      } else {
+        request().then(list=>{
+          cache[tab] = list
+          fn(list)
+        })
+      }
+    }
+  }()
+
+  // 测试
+  function render(list) {
+    for(var i=0; i<list.length; i++) {
+      console.log('渲染当前行：', list[i])
+    }
+  }
+  function getList() {
+    return new Promise(resolve=>{
+      setTimeout(()=>{
+        resolve([Math.random(),Math.random()])
+      },200)
+    })
+  }
+
+  Memento('good', render, getList)
+</script>

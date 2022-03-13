@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>minivue</title>
+</head>
+<body>
+
+  <div id='app'>
+
+    <h1 v-text='num' :title='num'></h1>
+    <button v-on:click='handle'>自增</button>
+
+    <hr>
+
+    <div>请输入你的用户名：<input type="text" v-model='name' /></div>
+    <div>你的用户名是：<span v-text='name'></span></div>
+
+    <hr>
+
+    <div>
+      <div>
+        <h1 v-text='num'></h1>
+      </div>
+    </div>
+
+    <hr>
+
+    <h1 v-text='user.age'></h1>
+
+  </div>
+
+  <script src='./src/vue.js'></script>
+  <script>
+    // 写一个简单Vue需要这些资源：vue.js源码、MDN、响应式原理流程图。。。
+    const app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          count: 1,
+          num: 2,
+          title: 'GP7',
+          name: '',
+          user: {
+            age: 30,
+            mobile: '13000001111'
+          }
+        }
+      },
+      methods: {
+        handle() {
+          console.log('clicked', this)
+          this.num++
+        },
+        getName(ev) {
+          console.log('表单发生了变化', ev.target.value)
+          this.name = ev.target.value
+        }
+      },
+      mounted() {
+        console.log('---mounted')
+      }
+    })
+  </script>
+
+</body>
+</html>

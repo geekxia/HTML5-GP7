@@ -1,0 +1,83 @@
+<view>
+
+    <!-- 滚动视频 -->
+    <scroll-view class='cates' scroll-x scroll-into-view='qf{{curId-2}}'>
+      <view
+        wx:for='{{cates}}'
+        wx:key='*this'
+        class='cate {{curId===index?"on":""}}'
+        data-index='{{index}}'
+        bindtap='cateTap'
+        id='qf{{index}}'
+      >
+        {{item.label}}
+      </view>
+    </scroll-view>
+
+    <view class='info'>
+      <image src='/assets/marker.png' />
+      <text>千锋教育</text>
+    </view>
+
+    <image class="fes" src='/assets/fes.png' mode='aspectFill' />
+
+    <input class="search" type="text" type='number' confirm-type='search' />
+
+    <!-- 列表渲染时，如果事件绑定的节点和wx:for在同一个节点上，那么点击循环中动态节点，是无法拿到dataset。 -->
+    <!-- 怎么办呢？要想点击动态节点也能拿到dataset，需要把事件直接绑定动态节点上。 -->
+    <view wx:for='{{list}}' wx:key='*this'>
+        <text>{{item.name}}</text>
+        <text>--</text>
+        <text data-id="{{item.id}}" bindtap="userTap">{{item.age}}</text>
+    </view>
+
+    <view wx:if="{{idx===1}}">一行文字</view>
+    <view wx:elif='{{idx===2}}'>二行文字</view>
+    <view wx:else>三行文字</view>
+
+    <view hidden="{{true}}">四行文字</view>
+    <view style="color:{{'blue'}}">测试动态样式</view>
+
+    <view class="box" bindtap="outerTap">
+        <view class="inner" catchtap="innerTap"></view>
+    </view>
+
+    <input type="text" model:value="{{name}}" />
+
+    <view id='test'>测试DOM</view>
+
+    <view class="abc"></view>
+    <button bindtap="start1">开始动画</button>
+
+    <view class="door"></view>
+    <button bindtap="start2">关门</button>
+
+    <!-- 演示button表单的使用 -->
+    <button open-type='contact'>联系客服</button>
+    <button open-type='getUserInfo' bindtap='getInfo'>获取用户头像</button>
+    <button open-type='feedback'>投诉建议</button>
+    <button open-type='chooseAvatar' bindchooseavatar='getAvatar'>换头像</button>
+
+    <!-- 使用picker -->
+    <picker mode="region" bindchange="getRegion" value="{{region}}" custom-item="全部">
+       <view class="picker" wx:if='{{region.length===0}}'>
+         选择省市区
+       </view>
+       <view class="picker">
+         {{region[0]}}{{region[1]}}{{region[2]}}
+       </view>
+     </picker>
+
+     <picker
+       mode='multiSelector'
+       range='{{qfRange.range}}'
+       range-key='label'
+       bindchange='qfChange'
+       bindcolumnchange='qfColChange'
+       >
+       <view>选择学员</view>
+     </picker>
+
+
+
+</view>

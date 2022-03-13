@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <qf-button></qf-button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+  <script type='text/x-template' id='button'>
+    <div>
+      <button>异步的组件</button>
+    </div>
+  </script>
+
+  <script>
+    // 定义一个异步组件
+    Vue.component('qf-button', function(resolve, reject){
+      setTimeout(()=>{
+        resolve({
+          template: '#button'
+        })
+      }, 5000)
+    })
+
+    var app = new Vue({
+      el: '#app'
+    })
+  </script>
+
+</body>
+</html>

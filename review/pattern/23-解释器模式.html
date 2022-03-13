@@ -1,0 +1,47 @@
+<div>
+  <div>
+    <h1>
+      <a href="">
+        <span id='year'>2021</span>
+        <span id='next'>
+          <span class="next">2022</span>
+        </span>
+      </a>
+    </h1>
+  </div>
+</div>
+
+<script>
+  // 解释器模式：把一种数据（语言）转换成另一种目标数据（语法）。
+
+  var Interpreter = function() {
+    this.paths = []
+  }
+  Interpreter.prototype.createPath = function(node) {
+    var ele = {
+      tag: node.tagName,
+      id: node.getAttribute('id'),
+      class: node.getAttribute('class')
+    }
+    this.paths.unshift(ele)
+    // 设定递归的终止条件
+    if (node.parentNode && node.parentNode!==document) {
+      // arguments.callee 代表的就是当前函数
+      this.createPath(node.parentNode)
+    }
+    return this
+  }
+  Interpreter.prototype.getPath = function() {
+    var result = []
+    for (var i=0; i<this.paths.length; i++) {
+      result.push(this.paths[i].tag)
+    }
+    return result.join('>')
+  }
+
+  var in1 = new Interpreter()
+  var p1 = in1.createPath(document.getElementById('next')).getPath()
+
+  var in1 = new Interpreter()
+  var p2 = in1.createPath(document.querySelector('.next')).getPath()
+</script>

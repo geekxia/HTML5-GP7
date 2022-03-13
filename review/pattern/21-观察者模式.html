@@ -1,0 +1,64 @@
+<script>
+  // 观察者模式：消息主体、观察者集合。
+  // 我们已知的观察模式的应用：事件总线、依赖收集、mobx。
+
+  // const bus = new Vue()
+  // bus.on('aaa', (msg)=>{})
+  // bus.emit('aaa', '你在吗')
+
+  // 观察者集合：创建一个容器，承载各个观察者（观察者方法）
+  var Observer = function() {
+    this.list = []
+  }
+  // 向观察者集合中添加一个观察者（观察者方法）
+  Observer.prototype.addObserver = function(fn) {
+    this.list.push(fn)
+  }
+
+  // 消息主体：订阅、发布。
+  var Subject = function(name) {
+    this.name = name
+    this.channels = {}
+  }
+  // 相当于vue中的 $on(type, callback)
+  Subject.prototype.subscribe = function(type, callback) {
+    if (!this.channels[type]) {
+      // 创建一个观察者集合
+      this.channels[type] = new Observer()
+    }
+    // 存储当前type频道上的观察者方法
+    this.channels[type].addObserver(callback)
+  }
+  // 相当于vue中的 $emit(type, msg)
+  Subject.prototype.publish = function(type, msg) {
+    var list = this.channels[type].list
+    for (var i=0; i<list.length; i++) {
+      list[i](msg)
+    }
+  }
+
+  // 创建一个观察者模式（你可以类比成vue的事件总结）
+  var bus = new Subject('vue')  // bus.subscribe()  bus.publish()
+
+  var Vue = function(name) {
+    this.name = name
+  }
+  Vue.prototype.on = function(type, callback) {
+    bus.subscribe(type, callback)
+  }
+
+  // 创建vue实例
+  var v1 = new Vue('首页')
+  v1.on('aaa', msg=>{
+    console.log(`我是${v1.name}，有人向我发消息了：${msg}`)
+  })
+  v1.on('bbb', msg=>{
+    console.log(`我是${v1.name}，有人向我发消息了：${msg}`)
+  })
+
+  var v2 = new Vue('个人中心')
+  v2.on('aaa', msg=>{
+    console.log(`我是${v2.name}，有人向我发消息了：${msg}`)
+  })
+
+</script>

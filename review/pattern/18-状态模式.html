@@ -1,0 +1,45 @@
+<script>
+  // 状态模式：状态驱动行为，行为决定状态。
+  // 状态模式的封装原则，把状态和行为分离。
+  // 在状态模式中，状态有是有限的。
+
+  var StudentState = function(name) {
+    this.name = name
+    this.current = []  // 当前对象的状态
+    this.states = {
+      study: function () {
+        console.log('正在学习')
+      },
+      xiangqi: function() {
+        console.log('正在下棋')
+      },
+      sleep: function() {
+        console.log('正在睡觉')
+      },
+      fantasy: function() {
+        console.log('正在幻想')
+      }
+    }
+  }
+  // 执行你当前的状态
+  StudentState.prototype.execute = function() {
+    // console.log('听话', this.current)
+    for (var i=0; i<this.current.length; i++) {
+      this.states[this.current[i]]()
+    }
+    // 在执行行为时，我还可以倒回来再改变状态current。这是状态模式的【核心】
+  }
+  // 改变当前用户的状态
+  StudentState.prototype.change = function() {
+    var newCurrent = Array.prototype.slice.apply(arguments)
+    this.current = newCurrent
+    // 当状态发生变化时，执行新状态（行为），这是状态模式的【核心】
+    this.execute()
+  }
+  // 返回用户的当前状态
+  StudentState.prototype.getState = function() {
+    return this.current
+  }
+
+  var zs = new StudentState('张三')
+</script>

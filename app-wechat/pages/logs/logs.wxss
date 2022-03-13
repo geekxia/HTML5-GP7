@@ -1,0 +1,22 @@
+.log-list {
+  display: flex;
+  flex-direction: column;
+  padding: 40rpx;
+}
+.log-item {
+  margin: 10rpx;
+}
+
+.row {
+  line-height: 80rpx;
+  border-bottom: 1rpx solid #ccc;
+  box-sizing: border-box;
+  padding: 20rpx 32rpx;
+}
+.row image {
+  display: inline-block;
+  width: 80rpx;
+  height: 80rpx;
+  vertical-align: middle;
+  margin-right: 32rpx;
+}

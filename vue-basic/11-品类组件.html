@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .qf-cate span {
+      display: inline-block;
+      padding: 10px 20px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+    .qf-cate span.on {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <div id='app'>
+    <qf-cate :data='tabs' v-model='tab'></qf-cate>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    Vue.component('qf-cate', {
+      template: `
+      <div class='qf-cate'>
+        <span
+          v-for='item in data'
+          v-text='item.label'
+          :class='{"on":item.value===value}'
+          @click='$emit("input", item.value)'>
+        </span>
+      </div>
+      `,
+      props: {
+        data: { type: Array, required: false, default: [] },
+        value: { type: String, required: false, default: '' }
+      }
+    })
+  </script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tabs: [
+          { id: 1, label: '全部', value: '' },
+          { id: 2, label: '问答', value: 'ask' },
+          { id: 3, label: '招聘', value: 'job' },
+          { id: 4, label: '分享', value: 'share' },
+          { id: 5, label: '精华', value: 'good' }
+        ],
+        tab: ''
+      },
+      watch: {
+        tab() { console.log('调接口') }
+      }
+    })
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<script>
+  // 中介者模式：向一系列的相同对象做一个任务，找一个中介来帮我完成。
+
+  var Mediator = function() {
+    var plan = {}
+    return {
+      // 中介者用于收集任务（新年计划）{to,fn}
+      commit: function(to,fn) {
+        if (!plan[to]) plan[to] = []
+        plan[to].push(fn)
+      },
+      // 中介者开放给外界的接口，用于执行所有任务（新年计划）
+      start: function(to) {
+        for (var i=0; i<plan[to].length; i++) {
+          plan[to][i]()
+        }
+      }
+    }
+  }
+
+  var me = new Mediator()
+  // 中介者收集任务
+  me.commit('ceo', ()=>console.log('招生一万人'))
+  me.commit('ceo', ()=>console.log('迭代教学大纲'))
+  me.commit('manager', ()=>console.log('明年争取20个班'))
+</script>

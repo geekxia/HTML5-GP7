@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <qf-view></qf-view>
+    <h1 v-color='"red"'>测试全局指令</h1>
+    <h1>{{'78.9' | rmb}}</h1>
+    <button @click='handle'>测试点击</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 插件开发：造轮子，给Vue生态圈提供更多优良的插件或工具。
+
+    // const QfPlugin = function(Vue) {}
+    const QfPlugin = {
+      install(Vue) {
+        Vue.component('qf-view', {
+          template: `<div>qf-view</div>`
+        })
+        Vue.directive('color', function(el, binding){
+          el.style.color = binding.value
+        })
+        Vue.filter('rmb', function(val){
+          return Number(val).toFixed(2)
+        })
+        Vue.mixin({
+          methods: {
+            qfHandle() {
+              console.log('qf handle')
+            }
+          }
+        })
+        // vue中有个规范，原型链的方法或属性，都建议以$开头。
+        Vue.prototype.$dialog = function() {
+          // do something
+          alert('弹框')
+        }
+      }
+    }
+
+    // 如果QfPlugin是函数就直接调用，如果QfPlugin是对象就调用它的install()方法。
+    Vue.use(QfPlugin)
+
+    const app = new Vue({
+      el: '#app',
+      methods: {
+        handle() {
+          this.qfHandle()
+          this.$dialog()
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

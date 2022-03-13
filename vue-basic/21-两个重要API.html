@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <h6>文章内容如下：</h6>
+    <div v-html='content'></div>
+    <hr>
+
+    <qf-button :info='info'></qf-button>
+    <button @click='changeInfo'>点击</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // $nextTick(()=>{dom操作;})
+    // 作用：当我们动态地渲染html时，接着又要这个动态html做DOM操作时，可以使用这个API来实现。它的功能与updated的功能类似。
+
+    // $forceUpdate()
+    // 作用：vue响应式是有缺陷的。当声明式变量嵌套层级过深时，其响应式是没有作用的，也就是说“声明式变量明明已经发生了变化，但视图不更新”。这时使用这个api来强制触发更新视图。
+
+    Vue.component('qf-button', {
+      template: `<div v-text='info.list[0].a.b.c.d.e'></div>`,
+      props: {
+        info: { type: Object, default: {} }
+      }
+    })
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        content: '',  // 异步数据
+        info: {
+          list: [
+            { a: { b: { c: { d: { e: 100 }}}}}
+          ]
+        }
+      },
+      mounted() {
+        // 调接口成功
+        this.content = '<div><h4 id="title">标题：我是来自后端接口返回的HTML字符串</h4><div>文章内容</div></div>'
+        // 生成新的虚拟DOM，再diff运算，最终更新DOM
+        // 在下一个更新周期中可以访问到上面渲染成功的DOM.
+        this.$nextTick(()=>{
+          document.getElementById('title').style.color = 'blue'
+          // 对上面的content任何的DOM操作
+        })
+      },
+      // 第三阶段（更新阶段）
+      // updated() {
+      //   document.getElementById('title').style.color = 'blue'
+      // }
+      methods: {
+        changeInfo() {
+          this.info.list[0].a.b.c.d.e = 200
+          // 假如：明明data更新成功了，但视图不更新。
+          this.$forceUpdate()
+        }
+      }
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BuildYourOwnReact</title>
+  <style>
+    .box { color: red; }
+  </style>
+</head>
+<body>
+
+  <div id='app'></div>
+
+  <script src='./dist/babel.min.js'></script>
+  <script src='./src/react6.js'></script>
+  <script type='text/babel'>
+    // const app = React.createElement('h1',{},'Hello Lin')
+    // const app = <h1 className='box'>Hello JSX</h1>
+
+    const App = () => {
+      const [num, setNum] = React.useState(100)
+      const add = () => {
+        console.log('clicked')
+        setNum(num=>num+1)
+      }
+      return (
+        <div>
+          <h1>Hello LQ</h1>
+          <h1>{ num }</h1>
+          <button onClick={add}>自增</button>
+        </div>
+      )
+    }
+
+    React.render(<App />, document.getElementById('app'))
+  </script>
+
+</body>
+</html>

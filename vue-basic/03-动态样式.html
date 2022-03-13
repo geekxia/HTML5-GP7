@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .box { color: red; }
+
+    .c1 { color: blue; }
+    .c2 { color: green; }
+    .c3 { color: orange; }
+
+    .f1 { font-size: 30px; }
+    .f2 { font-size: 40px; }
+    .f3 { font-size: 50px; }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <h2 class='box'>静态的class样式</h2>
+
+    <!-- 尽可能不要把动态class和静态class一起使用，原因是动态class起作用的时间偏慢一些 -->
+    <h2 :class='cc'>动态的class样式</h2>
+    <h2 :class='`box ${cc} ${ff}`'>动态的class样式（字符串拼接语法）</h2>
+    <h2 :class='["box", `${cc}`, ff, createCC(), true?"c3":"c2"]'>动态的class样式（数组语法）</h2>
+    <h2 :class='{
+      box: true,
+      [`${cc}`]: true,
+      [ff]: fBol,
+      [createCC()]: true,
+      c3: cBol,
+      c2: !cBol
+    }'>动态的class样式（对象语法）</h2>
+    <hr>
+
+    <h2 style='color: red;font-size:20px;'>静态的style样式</h2>
+
+    <h2 :style='s1'>动态的style样式</h2>
+    <h2 :style='`color:${"red"};fontSize:20px;`'>动态的style样式（字符串拼接语法）</h2>
+
+    <h2 :style='s2'>动态的style样式</h2>
+    <h2 :style='[
+      {color:"red",fontSize:"20px"},
+      {color: co, ["font-size"]: `${fz}px` },
+      {[`margin-${margin}`]: `${size}px`},
+      createSS()
+    ]'>动态的style样式（数组语法）</h2>
+
+    <h2 :style='s3'>动态的style样式</h2>
+    <h2 :style='{
+      color: co,
+      fontSize: `${fz}px`,
+      [`margin-${margin}`]: `${size}px`,
+      ...createSS()
+    }'>动态的style样式（对象语法）</h2>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+
+    // 动态样式
+    // 作用：使用声明式变量来控制class、style的值。
+    // 语法：:class / :style
+
+    // :class='由css类名拼接而成的字符串'
+    // :class='[表达式1, 表达式2, ...]'  注：每一个表达式都要求返回一个已经定义过的css类
+    // :class='{"CSS类名1":布尔值, "CSS类名2":布尔值, ...}'  注：对象语法中key名的返回是有效的css类名，value必须是布尔值（小心布尔值的隐式类型转换）。
+
+    // :style='ss'  // ss可以html5中style值的字符串，可以[{},{}]，还可以直接是 {css属性名:css属性值}
+    // :style='[{},{}, ...]'  // 注：数组中的每个对象都是“css属性:css属性值”构成的对象。
+    // :style='{css属性:css属性值, ...}'
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        cc: 'c1',
+        ff: 'f1',
+        fBol: true,
+        cBol: true,
+        s1: 'color:red;fontSize:30px;',
+        s2: [{color:'red'},{fontSize:'20px'}],
+        s3: {
+          color: 'red',
+          fontSize: '30px',
+          ['padding-top']: '10px'
+        },
+        co: 'red',
+        fz: 20,
+        margin: 'top',
+        size: 0
+      },
+      methods: {
+        createCC() {
+          // do something
+          return 'c2'
+        },
+        createSS() {
+          return { color: 'blue' }
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

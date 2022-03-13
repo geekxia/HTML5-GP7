@@ -1,0 +1,14 @@
+.canvas {
+  width: 750rpx;
+  height: 750rpx;
+}
+.map {
+  width: 750rpx;
+  height: 400rpx;
+}
+
+.cam {
+  display: block;
+  width: 100%;
+  height: 200rpx;
+}

@@ -1,0 +1,45 @@
+<meta charset="utf-8" />
+
+<script>
+  // 桥接模式：关注当前模块中每一个子模块的可变性，把这些可变的子模块封装起来。
+
+  var ProductManager = function(name) {
+    this.name = name
+    this.prd = []
+  }
+  ProductManager.prototype.design = function(demand) {
+    this.prd.push(demand)
+  }
+
+  var UserInterface = function(name) {
+    this.name = name
+    this.uis = []
+  }
+  UserInterface.prototype.draw = function(demand) {
+    this.uis.push(demand)
+  }
+
+  var FrontEngineer = function(name) {
+    this.name = name
+  }
+  FrontEngineer.prototype.develop = function(prd,uis) {
+    console.log('当前开发任务已经完成', prd, uis)
+  }
+
+  // 封装一个桥接类
+  var Bridge = function(name) {
+    this.name = name
+  }
+  Bridge.prototype.work = function() {
+    var pm = new ProductManager('张三')
+    pm.design('首页')
+    pm.design('登录页')
+    pm.design('个人中心')
+    var ui = new UserInterface('李四')
+    ui.draw('首页')
+    var fe = new FrontEngineer('王五')
+    fe.develop(pm.prd, ui.uis)
+  }
+
+  new Bridge('千锋').work()
+</script>

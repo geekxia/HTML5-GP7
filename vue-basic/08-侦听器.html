@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <h1 v-text='count'></h1>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 侦听器（监听器）
+    // 误解：这个侦听器watch，是vue组件的一个选项，不是响应式原理中Watcher。
+
+    // 作用：用于监听一个响应式变量（带有__ob__）的变化。比如工作中，我们经常监听data、计算属性、vuex、$route等的变化。
+
+    // 总结：当我们需要根据某个变量的变化时，做另外一件事儿，这里watch将大有作为。
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        count: 1,
+        num: 1,
+        info: {
+          user: {
+            name: 'zhangsan',
+            age: 10
+          }
+        }
+      },
+      computed: {
+        cc() {
+          return this.count*100
+        }
+      },
+      // 注意1：虽然watch对象中放的是函数，但不能用this访问这些watch函数。
+      // 注意2：当watch函数是箭头语法时，它的this就不再是当前组件实例了。
+      watch: {
+        // 监听count的变化，当count变化时它所对应的函数会执行
+        count(newVal, oldVal) {
+          // do something
+          console.log('count新值', newVal)
+          console.log('count旧值', oldVal)
+        },
+        // 监听cc这个计算属性的变化
+        // cc: 'handleCcChange',
+        // cc() { console.log('cc变化了') },
+        cc: {
+          handler() { console.log('cc变化了') }
+        },
+        info: {
+          handler() { console.log('info变化了') },
+          // 要理解为什么deep默认是false
+          deep: true
+        },
+        'info.user.age': {
+          handler() { console.log('info中的age变化了') }
+        }
+      },
+      methods: {
+        handleCcChange() {
+          // do something
+          console.log('cc变化了', this)
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

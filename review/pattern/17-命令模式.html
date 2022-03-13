@@ -1,0 +1,38 @@
+<script>
+  // 命令模式：对一套有限的命令进行封装。
+
+  // 以军训教官的命令为例
+  var TrainingCommand = function() {
+    var result = 0  // 默认是正北
+    var cmds = {
+      stand: function() {
+        console.log('执行立正命令')
+      },
+      right: function() {
+        console.log('执行向右转命令')
+        result += 90
+      },
+      left: function() {
+        console.log('执行向左转命令')
+        result -= 90
+      },
+      back: function() {
+        console.log('执行立后转命令')
+        result += 180
+      }
+    }
+    return function() {
+      // console.log('arguments', arguments)
+      // 在mobx中有时候也会遇到这个问题
+      var arr = Array.prototype.slice.apply(arguments)
+      for (var i=0; i<arr.length; i++) {
+        // console.log('arr[i]', arr[i])
+        cmds[arr[i]]()
+      }
+      return result
+    }
+  }()
+
+  var deg = TrainingCommand('right','left','back','right','right','right')
+
+</script>

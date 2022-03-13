@@ -1,0 +1,54 @@
+.qf-layout {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  &>.ant-layout {
+    height: 100%;
+  }
+  .ant-layout-sider {
+    position: relative;
+  }
+  .toggle {
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    padding-left: 16px;
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+  }
+  .logo {
+    text-align: center;
+    margin-top: 15px;
+    padding-bottom: 10px;
+    &>img {
+      display: inline-block;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+  .logo.on {
+    &>img {
+      width: 30px;
+      height: 30px;
+    }
+  }
+  .ant-layout-content {
+    position: relative;
+    .qf-content {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      overflow: auto;
+      min-width: 900px;
+    }
+    .qf-footer {
+      line-height: 60px;
+      text-align: center;
+    }
+  }
+}

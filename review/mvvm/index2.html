@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>React</title>
+</head>
+<body>
+
+  <div id="app"></div><hr>
+
+  <div id='root'></div>
+
+  <script src='./dist/babel.min.js'></script>
+  <script src='./dist/react.development.js'></script>
+  <script src='./dist/react-dom.development.js'></script>
+
+  <script type='text/javascript'>
+    // 创建了一个React元素
+    const app = React.createElement('h1', {title:'GP7'}, 'Hello GP7')
+    ReactDOM.render(app, document.getElementById('app'))
+  </script>
+
+  <script type='text/babel'>
+    const App = () => {
+      const [num, setNum] = React.useState(0)
+      return (
+        <div>
+          <h1>{ num }</h1>
+          <button onClick={()=>setNum(num-1)}>自减</button>
+          <button onClick={()=>setNum(num+1)}>自增</button>
+        </div>
+      )
+    }
+    ReactDOM.render(<App />, document.getElementById('root'))
+  </script>
+
+</body>
+</html>

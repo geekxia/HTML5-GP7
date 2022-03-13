@@ -1,0 +1,21 @@
+<script>
+  // 组合模式
+
+  var Header = function() {}
+  var Sider = function() {}
+  var Main = function() {}
+  var Footer = function() {}
+
+  // 组合
+  var Composite = function() {
+    this.layout = []
+  }
+  Composite.prototype.add = function(type) {
+    this.layout.push(new window[type]())
+    return this
+  }
+
+  var page1 = new Composite().add('Header').add('Footer')
+  var page2 = new Composite().add('Main').add('Sider').add('Footer')
+
+</script>

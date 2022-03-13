@@ -1,0 +1,10 @@
+<view>
+  <qf-button type='danger' text='删除' bindmyevent='getMsg'></qf-button>
+
+  <view wx:for='{{list}}' wx:key='*this' class='row' data-id='{{item.id}}' bindtap='skipToDetail'>
+    <!-- <navigator url='/pages/detail/detail?id={{item.id}}'> -->
+      <image src='{{item.author.avatar_url}}' />
+      <text>{{item.title}}</text>
+    <!-- </navigator> -->
+  </view>
+</view>

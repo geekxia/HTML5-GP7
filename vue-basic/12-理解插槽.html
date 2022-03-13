@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <qf-people>
+      <!-- 人话：把template所包裹的元素放在qf-people的名字叫gebo的<slot>显示，'scope'是子组件的<slot>回传的数据。 -->
+      <template #gebo='scope'>
+        <h1>胳膊很强壮 {{scope.count}}</h1>
+        <div>1</div>
+        <div>2</div>
+      </template>
+      <template #tui>
+        <h1 :title='title'>下肢</h1>
+      </template>
+    </qf-people>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 插槽 <slot>
+    // 如何理解插槽？当我们封装自定义组件时，从组件结构的角度来看，某些结构是不确定的，那么我们使用<slot>占个位置。当这个组件被真正使用时，才能够确定这个位置放的是什么元素。这就叫“插槽”。
+
+    // 结论：以后封装组件，哪个地方不确定，就放一个<slot>占位。如果有多个地方不确定，就放多个不同的<slot>。如何区分<slot>的不同呢？使用“命名插槽”，给<slot name=''>。
+
+    // 1、<slot>默认叫'default'。
+    // 2、v-slot是一个指令，用于指定用哪个<slot>来显示当前元素。它简写为 #
+    // 3、<slot xxx>可以添加任意的自定义属性，在父组件中使用 v-slot来获取数据。
+
+    Vue.component('qf-people', {
+      template: `
+      <div>
+        <div>头</div>
+        <div>驱干</div>
+        <slot name='gebo' :count='count'></slot>
+        <slot name='tui'></slot>
+        <button @click='count++'>自增</button>
+      </div>
+      `,
+      data() {
+        return { count: 0 }
+      }
+    })
+    const app = new Vue({
+      el: '#app',
+      data: { title: 'qf' }
+    })
+  </script>
+
+</body>
+</html>

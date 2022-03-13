@@ -1,0 +1,25 @@
+<script>
+  // 策略模式：对一套算法进行封装、维护、迭代。
+
+  var DiscountStrategy = function(name) {
+    this.name = name
+    var algorithms = {
+      newyear: function(price) {
+        return price * 0.9 + 2000
+      },
+      mayday: function(price) {
+        return price * 0.8
+      },
+      national: function(price) {
+        return price * 0.5
+      }
+    }
+    return function(alg, price) {
+      return algorithms[alg] && algorithms[alg](price)
+    }
+  }
+
+  var html5 = new DiscountStrategy('qf')
+  var price = html5('newyear', 24000)
+
+</script>

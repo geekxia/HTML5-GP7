@@ -1,0 +1,15 @@
+.qf-table {
+  .title-btns {
+    text-align: right;
+    &>.anticon {
+      display: inline-block;
+      margin-left: 15px;
+      cursor: pointer;
+      .on {
+        color: blue;
+        background-color: rgba(0,0,255,0.6);
+      }
+    }
+  }
+
+}

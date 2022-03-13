@@ -1,0 +1,13 @@
+/* components/button/button.wxss */
+
+.default {
+    background-color: blue;
+    color: white;
+    text-align: center;
+}
+
+.danger {
+    background-color: red;
+    color: white;
+    text-align: center;
+}

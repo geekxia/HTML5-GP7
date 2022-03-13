@@ -1,0 +1,38 @@
+<script>
+  // 迭代器模式：封装一个用于遍历目标对象的类。
+  // 以迭代数组为例，封装一个迭代器。迭代器一般有两种：
+  // 第1种：内部迭代器，把遍历的逻辑封装起来。
+  // 第2种：外部迭代器，把遍历的方法交给用户。
+
+  // 封装内部迭代器
+  var InterIterator = function() {}
+  InterIterator.prototype.traverse = function(arr,callback) {
+    for (var i=0; i<arr.length; i++) {
+      callback && callback(arr[i], i, arr)
+    }
+  }
+
+  var iterator = new InterIterator()
+  iterator.traverse([1,2,3,4], (ele,idx,arr)=>console.log('--',ele,idx,arr))
+  // 扩展思考：手动封装 forEach()方法
+
+
+  // 封装外部迭代器（用到闭包的知识）
+  var OuterIterator = function(arr) {
+    var current = 0  // 用于遍历的指针
+    function next() {
+      current += 1
+    }
+    function hasNext() {
+      return current < arr.length-1
+    }
+    function getCurrent() {
+      return arr[current]
+    }
+    return { next, hasNext, getCurrent }
+  }
+
+  var array = [100,200,300,400]
+  var iterator2 = new OuterIterator(array)
+  // 扩展思考：手动封装 Iterator迭代器。
+</script>

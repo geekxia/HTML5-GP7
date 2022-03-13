@@ -1,0 +1,51 @@
+<script>
+  // 责任链模式：一个需求任务不知道由哪个角色来解决，我们要在责任链条去寻找能够处理当前需求的方法。
+  // 在责任链上的每一个“处理节点”都是一个“责任节点”。
+
+  var TeachChain = function(name) {
+    this.name = name
+    this.materials = null
+    this.result = false
+  }
+  TeachChain.prototype.handle = function(materials) {
+    this.materials = materials
+    // 交给班主任处理
+    this.gangerHandle()
+    return this
+  }
+  // 班主任
+  TeachChain.prototype.gangerHandle = function() {
+    if (this.materials.day < 1) {
+      this.result = '同意请假'
+    } else {
+      this.teacherHandle()
+    }
+    return this
+  }
+  // 讲师
+  TeachChain.prototype.teacherHandle = function() {
+    if (this.materials.day < 3) {
+      this.result = '同意请假'
+    } else {
+      this.headmasterHandle()
+    }
+    return this
+  }
+  // 校长
+  TeachChain.prototype.headmasterHandle = function() {
+    if (this.materials.day <100) {
+      this.result = '请办理休学'
+    } else {
+      this.result = '请办理退学'
+    }
+    return this
+  }
+  // 获取审核的结果
+  TeachChain.prototype.getCheckResult = function() {
+    console.log('你的申请结果是：', this.result)
+    return this.result
+  }
+
+  new TeachChain('html5').handle({day:2}).getCheckResult()
+  new TeachChain('html5').handle({day:300}).getCheckResult()
+</script>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <qf-button></qf-button>
+    <h1 v-text='role'></h1>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 混入Mixin
+    // 作用：Vue组件是基于选项（原材料）的，混入给我们提供了一种复用“选项（原材料）”的方案。
+
+    // 全局混入vs.局部混入 的区别：前者强制混入，后者是按需混入。
+
+    // 全局混入
+    Vue.mixin({
+      data(){
+        return {
+          role: 'admin'
+        }
+      },
+      methods: {
+        favId(id) {
+          console.log('调接口进行埋点', id)
+        }
+      }
+    })
+
+    const opt = {
+      mounted() {
+        console.log('mounted')
+      },
+      data() {
+        return {
+          role: 'editor'
+        }
+      }
+    }
+
+    Vue.component('qf-button', {
+      template: `<div v-text='role'></div>`,
+      mounted() {
+        this.favId(1)
+      },
+      // 局部混入
+      mixins: [opt],
+      data() {
+        return {
+          role: 'ceo'
+        }
+      }
+    })
+
+    const app = new Vue({
+      el: '#app'
+    })
+  </script>
+
+</body>
+</html>

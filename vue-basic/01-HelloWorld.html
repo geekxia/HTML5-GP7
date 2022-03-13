@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id='app'>
+    <h1 v-text='msg'></h1>
+    <button v-on:click='changeMsg'>问好</button>
+    <hr>
+
+    <h1 v-text='count'></h1>
+    <button v-on:click='sub'>减</button>
+    <button v-on:click='add'>加</button>
+  </div>
+
+  <script>
+    // 核心思想：声明式、组件化。
+    // Vue简介：MVVM框架、支持IE9+、渐近式（可大可小）
+    // Vue学习路径：vue基础、vue全家桶、vue项目实战（移动端、管理系统、koa2）、独立搭建vue脚手架、vue造轮子、vue3.0、vue源码分析（手写vue）。
+
+    // Vue开发思想：当我们想要改变视图界面时，我们只用修改视图界面所对应的声明式变量。（间接）
+    // jQuery开发思想：当我们想要改变视图界面时，我们要使用$选择器获取DOM对象，再使用DOM API来操作DOM。（直接）
+
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    console.log('Vue', Vue)
+    // 创建一个Vue响应式系统
+    // 开发范式：基于选项的 new Vue(options)
+    const app = new Vue({
+      el: '#app',
+      // 声明式
+      data: {
+        msg: 'Hello World',
+        count: 1
+      },
+      methods: {
+        changeMsg() {
+          this.msg = 'hello gp7'
+        },
+        sub() {
+          this.count--
+        },
+        add() {
+          this.count++
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

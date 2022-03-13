@@ -1,0 +1,19 @@
+<script>
+  // 装饰器模式：在不改变旧功能的前提下，对已有功能进行修饰，进而为其添加新的功能。
+
+  var Dog = function(name) { this.name = name }
+  Dog.prototype.say = function() {
+    console.log(`${this.name}说：汪汪`)
+  }
+
+  // 封装一个装饰器的类
+  var CoatDog = function(target) {
+    this.target = target
+  }
+  CoatDog.prototype.say = function(content) {
+    this.target.say()
+    console.log(`${this.target.name}说了人话：${content}`)
+  }
+
+  var hh = new CoatDog(new Dog('小黄'))
+</script>

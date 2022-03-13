@@ -1,0 +1,39 @@
+<script>
+  // 访问者模式：把数据结构和操作数据的方法（业务方法）进行解耦。
+
+  var ContentVisitor = function() {
+    var content = {
+      children: '动画片、科幻片',
+      student: '黄冈题解、前端编程',
+      adult: '音乐节目、真人秀',
+      senior: '养生、广场舞蹈教学'
+    }
+    return function(person) {
+      // 根据person的类型，返回他能够访问者的数据
+      // console.log('当前用户是：', person)
+      var name = person.constructor.name.toLowerCase()
+      return content[name]
+    }
+  }()
+
+  var Person = function(name) {
+    this.name = name
+  }
+
+  var Children = function(name) {
+    Person.call(this, name)
+  }
+  var Student = function(name) {
+    Person.call(this, name)
+  }
+  var Adult = function(name) {
+    Person.call(this, name)
+  }
+  var Senior = function(name) {
+    Person.call(this, name)
+  }
+
+  var data1 = ContentVisitor(new Children('小王'))
+  var data2 = ContentVisitor(new Adult('张三'))
+
+</script>

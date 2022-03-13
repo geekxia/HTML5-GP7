@@ -1,0 +1,54 @@
+<script>
+  // 适配器模式：当前模块中使用相似的其它多个模块时，但这些模块的接口api不完全相同。
+
+  var BMap = function(name) {
+    this.name = name
+  }
+  BMap.prototype.init = function(lat,lng) {
+    console.log('百度地图初始化已完成：', lat, lng)
+    return this
+  }
+  BMap.prototype.show = function() {
+    console.log('百度地图渲染已完成')
+    return this
+  }
+
+  var QMap = function(name) {
+    this.name = name
+  }
+  QMap.prototype.create = function(lat, lng) {
+    console.log('腾讯地图初始化已完成：', lat, lng)
+    return this
+  }
+  QMap.prototype.display = function() {
+    console.log('腾讯地图渲染已完成')
+    return this
+  }
+
+
+  // 适合器的类
+  var MapAdapter = function(name) {
+    this.name = name
+    // 根据用户指定的name初始化对应的地图对象
+    this.map = new window[name]
+  }
+  MapAdapter.prototype.init = function(lat, lng) {
+    // do something
+    if (this.name==='BMap') this.map.init(lat, lng)
+    if (this.name==='QMap') this.map.create(lat, lng)
+    return this
+  }
+  MapAdapter.prototype.display = function() {
+    if (this.name==='BMap') this.map.show()
+    if (this.name==='QMap') this.map.display()
+    return this
+  }
+
+  // new BMap('BMap').init(1,1).show()
+  // new QMap('QMap').create(2,2).display()
+
+  // 使用适配器来生成不同的地图
+  new MapAdapter('BMap').init(1,2).display()
+  new MapAdapter('QMap').init(3,4).display()
+
+</script>

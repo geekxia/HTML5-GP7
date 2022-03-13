@@ -1,0 +1,17 @@
+.qf-login {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: rgba(0, 22, 41, 1);
+  .wrap {
+    background-color: white;
+    width: 600px;
+    margin: 0 auto;
+    margin-top: 120px;
+    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 3px;
+  }
+}

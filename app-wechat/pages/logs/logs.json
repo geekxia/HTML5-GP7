@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "听书",
+  "navigationStyle": "default",
+  "usingComponents": {
+    "qf-button": "/components/button/button"
+  },
+  "onReachBottomDistance": 80,
+  "enablePullDownRefresh": true
+}

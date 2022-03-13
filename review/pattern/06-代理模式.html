@@ -1,0 +1,23 @@
+<script>
+  // 代理模式
+  var Girl = function(name) {
+    this.name = name
+  }
+
+  var Tom = function(name) {
+    this.name = name
+  }
+  Tom.prototype.sendGift = function(gift, girl) {
+    console.log(`${this.name}送${girl.name}一个礼物：${gift}`)
+  }
+
+  // 构造一个代理类（相当于媒婆、快递公司）
+  var ProxyPattern = function() {}
+  ProxyPattern.prototype.send = function(gift, girl) {
+    (new Tom('很有钱的TOM')).sendGift(gift, girl)
+  }
+
+  var sf = new ProxyPattern()
+  sf.send('一辆很贵的车', new Girl('一个很好的女生'))
+  sf.send('钻戒', new Girl('小美'))
+</script>

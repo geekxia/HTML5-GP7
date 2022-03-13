@@ -1,0 +1,1 @@
+<view class="{{type}}" bindtap="tap">{{text}}</view>

@@ -1,0 +1,45 @@
+<!--index.wxml-->
+<view>
+  <!-- <camera class="cam" mode='scanCode' bindscancode='scanCode'></camera> -->
+  <button type="primary" bindtap="takePhoto">拍照</button>
+  <button type="primary" bindtap="scanCode">扫码</button>
+
+  <button bindtap='chooseIdCard'>选取身份证</button>
+
+
+  <canvas
+    type="2d"
+    class='canvas'
+    id="myCanvas">
+  </canvas>
+
+  <button bindtap='save'>保存到相册</button>
+
+  <!-- 登录弹框 -->
+  <view hidden='{{show}}'>
+    <button bindtap='openLogin'>登录</button>
+  </view>
+
+  <!-- 地图 -->
+  <map class="map" latitude='{{latLng.latitude}}' longitude='{{latLng.longitude}}' markers='{{markers}}'></map>
+  <button bindtap='call'>咨询</button>
+  <button bindtap='navigate'>导航</button>
+  <button bindtap='searchTap'>搜索</button>
+
+  <!-- 企业小程序，获取手机号 -->
+  <button open-type="getPhoneNumber" bindgetphonenumber="getMobile">登录</button>
+
+  <button open-type='share'>拼团的图标</button>
+
+
+  <match-media min-width="300" max-width="600">
+    <view>当页面宽度在 300 ~ 500 px 之间时展示这里</view>
+  </match-media>
+
+  <match-media min-height="200">
+    <view>当页面高度不小于 400 px 且屏幕方向为纵向时展示这里</view>
+  </match-media>
+
+  <button bindtap='pay'>立即支付</button>
+
+</view>

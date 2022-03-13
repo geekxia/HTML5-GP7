@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <h1 v-text='count'></h1>
+    <button @click='add'>自增</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 进一步理解“选项”，你可以理解创建vue组件所必须的“原材料”，template模板、data、methods、生命周期...
+
+    // Vue生命周期分为四个阶段（常用的有8个，实际上vue总共有11个）
+    // 第一阶段（创建阶段）：beforeCreate、created
+      // 细胞组合--出生：
+    // 第二阶段（挂载阶段）：beforeMount、mounted
+      // 上户口的过程
+    // 第三阶段（更新阶段）： beforeUpdate、updated
+      // 一圈一圈地长大
+    // 第四阶段（销毁阶段）：beforeDestroy、destroyed
+      // 死亡的过程
+
+    const app = new Vue({
+      // el: '#app',
+      data: {
+        count: 1
+      },
+      // 在beforeCreate之前，Vue做了两件事：
+      // methods声明、生命周期钩子函数声明
+      beforeCreate () {
+        console.log('-----beforeCreate')
+      },
+      // 在创建阶段，vue做了下面这些事：
+      // data数据注入、data数据劫持
+      // 1、遍历递归data选项，给每个声明式变量添加setter/getter
+      // 2、把劫持过变量都放在组件实例上
+      created () {
+        console.log('-----created')
+        // 调接口、开启ws长连接
+      },
+      // 在created之后、beforeMount之前，vue做了下面这些事：
+      // 1、通过el、template寻找组件的视图模板（带有指令的HTML字符串）
+      // 2、把找到的template视图（带有指令的HTML字符串）编译成render()函数
+
+      beforeMount () {
+        console.log('-----beforeMount')
+      },
+      // 在挂载阶段，vue做了下面这些事：
+      // 1、根据render()渲染函数，生成“抽象语法树AST”，再把AST创建成“虚拟DOM（VNode）”（Vnode是真实DOM的一种数据描述，它本质上是json格式的数据）
+      // 2、根据VNode创建真实DOM（背后有依赖收集、Watcher工作）把那些声明式变量都替换成真实数据，DOM渲染完成。
+      mounted () {
+        console.log('-----mounted')
+        // 调接口、开启长连接
+        // 开定时器
+        // 执行一些与DOM的操作
+      },
+      // 当被被劫持过的data数据发生变化时，这将进入更新阶段
+      beforeUpdate () {
+        console.log('-----beforeUpdate')
+      },
+      // 在更新阶段，vue做了下面这些事:
+      // 1、当vue上下文中的data发生变化时，使用render()渲染函数再生成一新的Vnode。
+      // 2、使用大名鼎鼎的Diff运算，patch('old vnode', 'new vnode')找出两个Vnode之间最小差异。
+      // 3、notify通过Watcher根据“依赖收集”再次更新真实DOM。
+      // 【为什么要有虚拟DOM这个的“玩意”？】虚拟DOM存在的价值，大大地降低了“jQuery时代下人为寻找DOM变化差异”的不足，最小化地去更新DOM（尽可能地减少了DOM操作）。所以虚拟DOM是MVVM的本质。
+      updated () {
+        console.log('-----updated')
+        // 用得比较少，偶尔会用到
+        // 比如：有一个与DOM有关的任务完成了，我们要做点事，可以在这里做。
+      },
+
+      // 当调用$destroy()或路由切换时，组件进入销毁阶段
+      beforeDestroy () {
+        console.log('-----beforeDestroy')
+        // 关闭长连接
+        // 关闭定时器
+        // 清除一些占用内存的缓存数据（vuex、本地存储数据。。）
+      },
+      // 在销毁阶段中，vue做了下面这些事:
+      // 1、拆卸掉Watcher，所以DOM不可能再发生更新。
+      // 2、拆卸掉当前组件的所有子组件，所以这些子组件也都进入销毁阶段。
+      // 3、卸载掉当前组件中的事件处理器。
+      destroyed () {
+        console.log('-----destroyed')
+      },
+      methods: {
+        add() {
+          this.count++
+        }
+      }
+    })
+    app.$mount('#app')  // 相当于 el:'#app'
+  </script>
+
+</body>
+</html>

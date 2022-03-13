@@ -1,0 +1,23 @@
+<script>
+  // 原型模式：通过原型继承来实现面向对象中的原型模式
+  var Animal = function(name) {
+    this.name = name
+  }
+  Animal.prototype.eat = function() {
+    console.log(`${this.name}正在吃饭`)
+  }
+  Animal.prototype.run = function() {
+    console.log(`${this.name}正在奔跑`)
+  }
+
+  // 在这里使用到了“组合继承”的语法
+  var Dog = function(name) {
+    // 调用父类的构造器方法，相当于面向对象中的super()
+    Animal.call(this, name)
+  }
+  Dog.prototype = new Animal()
+
+  var d1 = new Dog('小黑')
+  var d2 = new Dog('大黄')
+
+</script>

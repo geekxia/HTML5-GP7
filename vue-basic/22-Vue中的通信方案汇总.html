@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+
+    <qf-child-a :temper='temper'></qf-child-a>
+    <hr>
+
+    <qf-child-b v-model='temper'></qf-child-b>
+    <hr>
+
+    <div ref='box'>测试ref操作（DOM操作）</div>
+    <qf-child-c ref='child'></qf-child-c>
+    <button @click='changeChild'>改变孩子的名字</button>
+    <hr>
+
+    <qf-child-d></qf-child-d>
+    <button @click='visitTest'>测试$parent、$children的功能</button>
+    <hr>
+
+    <qf-child-e
+      :x='1'
+      :y='true'
+      class='ee'
+      :style='{color:"red"}'
+      @z='testListener'
+      v-model='eName'>
+    </qf-child-e>
+    <hr>
+
+    <qf-child-f></qf-child-f>
+    <hr>
+
+    <qf-child-g>
+      <template #default='scope'>
+        <h6 v-text='scope.num'></h6>
+      </template>
+    </qf-child-g>
+    <hr>
+
+    <qf-child-h></qf-child-h>
+    <hr>
+
+    <qf-child-i></qf-child-i>
+
+
+    <br v-for='i in 6'>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 如何理解“通信”？在应用程序中，"通信"指的是"数据交互"。
+
+    // Vue中有哪些可行的通信方案？
+
+    // 1、父子组件之间通信，父传子使用自定义属性，子传父使用自定义事件。这是vue中最最常用的一种通信方案，发生父子组件之间。
+
+    // 2、使用“状态提升”思想实现非直接父子组件（通常是兄弟组件）之间的通信。具体做法，当两个非直接父子组件之间要实现通信时，我们要找到它们最近的共同的父级组件，然后把这个需要共享的状态变量定义在这个共同的父级组件中。如果这个父级组件不太好找，一般不要使用“状态提升”。
+
+    // 3、使用ref（DOM快捷操作、访问vue实例）。
+      // 当ref作用在普通的HTML标签上时，将返回DOM对象。因此我们可以使用ref实现DOM操作。需要注意的是，Vue开发中要尽可能地减少ref操作。
+      // 当ref作用在自定义封装的vue组件上，将返回vue组件实例对象。因此我们可以使用ref可以快速地访问到子组件中的data或methods等。
+
+    // 4、使用$parent、$children这两个内置对象，可以在vue组件树上随意“穿梭”，预示着你可以在任意一个组件的作用域中访问其它任意组件实例对象的data或methods等。
+
+    // 5、使用$attrs、$listeners快速地访问父组件给我的自定义属性（除了class和style以外）或自定义事件。
+      // $attrs用于访问父组件给的自定义属性，但class和style访问不了。理论上它可以代替props的功能。
+      // $listeners用于访问（调用）父组件给的自定义事件。理论上它可以代替$emit()的功能。
+      // 注意：不要滥用$attrs、$listeners。
+
+    // 6、使用provide、inject选项实现父级组件向后代组件传递数据，这是一种单向的数据通信方式。
+      // provide选项，向当前组件树节点提供数据，向后代组件流动。
+      // inject选项，从组件树中注入数据，被注入的数据来自于父级组件。
+
+    // 7、自定义插槽也有通信的功能，是自定义组件通过插槽向父组件传送数据。
+      // 在子组件中使用：<slot :xxx='变量'></slot>
+      // 在父组件中使用：<template #default='scope'>
+
+    // 8、事件总线 new Vue()
+      // 作用：可以实现在任意两个组件之间实现通信，这种通信方式是一种“订阅-发布”模式。
+      // 做法：const bus = new Vue()
+      // bus.$emit('频道', '消息') 向指定“频道”上发送一条消息
+      // bus.$on('频道', function(msg){})  订阅指定“频道”，当频道上有消息时触发回调函数。
+      // 进一步理解：事件总线是一种“点->点”的直接通信
+
+    // 9、vuex 终极通信方案
+      // 在任意两个组件之间都能实现通信，这是vue技术栈最最推荐的一种通信方案。
+      // 思考：数据流。
+
+    // 简单小结：通信方案很多，常用“父子组件通信”“插槽通信”“vuex”。其它的通信方案谨慎使用。
+
+    const bus = new Vue()  // 主板  （南桥  ==总线bus==  北桥）
+
+    Vue.component('qf-child-a', {
+      template: `
+      <div>
+        <h6>我是qf-child-a组件</h6>
+        华氏温度：<div v-text='temper*2'></div>
+      </div>
+      `,
+      props: {
+        temper: { type: Number, default: 0 }
+      }
+    })
+
+    Vue.component('qf-child-b', {
+      template: `
+      <div>
+        <h6>我是qf-child-b组件</h6>
+        摄氏温度：<input type="text" v-model='temper' />
+      </div>
+      `,
+      props: {
+        // 注意：props表示由父组件传递过来的数据，在子组件不能直接修改，只能参与运算。
+        value: { type: Number, default: 0 }
+      },
+      computed: {
+        temper: {
+          get() { return this.value },
+          set(newVal) { this.$emit('input', Number(newVal)) }
+        }
+      }
+    })
+
+    Vue.component('qf-child-c', {
+      template: `
+      <div>
+        <h6>我是qf-child-c组件</h6>
+        <div v-text='name'></div>
+      </div>
+      `,
+      data() {
+        return { name: 'qf-child-c' }
+      },
+      methods: {
+        changeName(arg) { this.name = arg }
+      }
+    })
+
+    Vue.component('qf-child-d', {
+      template: `
+      <div>
+        <h6>我是qf-child-d组件</h6>
+      </div>
+      `,
+      mounted() {
+        console.log('访问我的哥哥', this.$parent.$children[0])
+      }
+    })
+
+    Vue.component('qf-child-e', {
+      template: `
+      <div>
+        <h6>我是qf-child-e组件</h6>
+        我的名字：<input type="text" v-model='name' />
+      </div>
+      `,
+      computed: {
+        name: {
+          get() { return this.$attrs.value },
+          set(newVal) { this.$listeners.input(newVal) }
+        }
+      },
+      mounted() {
+        console.log('$attrs父组件给我的自定义属性', this.$attrs)
+        console.log('$listeners父组件给我的自定义事件', this.$listeners)
+        this.$listeners.z('你好')
+      }
+    })
+
+    Vue.component('qf-child-f', {
+      template: `
+      <div>
+        <h6>我是qf-child-f组件</h6>
+        来自组件树中的数据：
+        <div v-text='aa'></div>
+        <div v-text='bb'></div>
+      </div>
+      `,
+      // 注入数据，注入成功后用this访问
+      // 【问题】当provide提供的数据发生变化时，当前不更新？？
+      inject: ['aa', 'bb']
+    })
+
+    Vue.component('qf-child-g', {
+      template: `
+      <div>
+        <h6>我是qf-child-f组件</h6>
+        <slot :num='num'></slot>
+        <button @click='num++'>自增</button>
+      </div>
+      `,
+      data() { return { num: 1 } }
+    })
+
+    Vue.component('qf-child-h', {
+      template: `
+      <div>
+        <h6>我是qf-child-h组件</h6>
+        <input type="text" v-model.trim='msg' />
+        <button @click='send'>发送</button>
+        <div v-html='content'></div>
+      </div>
+      `,
+      data() { return { msg: '', content: '' } },
+      methods: {
+        send() { bus.$emit('iii', this.msg); this.msg=''; }
+      },
+      mounted() {
+        bus.$on('hhh', msg=>{
+          this.content += `<div>${msg}</div>`
+        })
+      },
+
+    })
+    Vue.component('qf-child-i', {
+      template: `
+      <div>
+        <h6>我是qf-child-i组件</h6>
+        <input type="text" v-model.trim='msg' />
+        <button @click='send'>发送</button>
+        <div v-html='content'></div>
+      </div>
+      `,
+      data() { return { msg: '', content: '' } },
+      mounted() {
+        bus.$on('iii', msg=>{
+          this.content += `<div>${msg}</div>`
+        })
+      },
+      methods: {
+        send() { bus.$emit('hhh', this.msg); this.msg=''; }
+      }
+    })
+
+
+  </script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        temper: 0,
+        eName: 'child-e',
+        count: 2
+      },
+      // 向后代组件提供数据
+      // provide: {
+      //   aa: 1
+      // },
+      provide() {
+        // do something
+        return {
+          aa: 1,
+          bb: this.count
+        }
+      },
+      mounted() {
+        console.log('$refs', this.$refs)
+        this.$refs.box.style.color = 'red'
+      },
+      methods: {
+        changeChild() {
+          this.$refs.child.changeName('no-name')
+          console.log('child data name', this.$refs.child.name)
+        },
+        visitTest() {
+          console.log('child-d', this.$children[3])
+        },
+        testListener(msg) {
+          console.log('test listener 触发了， 来自某组件的消息', msg)
+        }
+      }
+    })
+  </script>
+
+
+</body>
+</html>

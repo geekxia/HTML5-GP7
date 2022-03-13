@@ -1,0 +1,41 @@
+.qf-menu-manage {
+  box-sizing: border-box;
+  height: 100%;
+  .menu-add {
+    background-color: white;
+    padding: 20px;
+  }
+  .menu-table {
+    margin: 20px;
+    background-color: white;
+  }
+}
+
+.qf-role-manage {
+  background-color: white;
+  margin: 20px;
+  border-radius: 2px;
+}
+
+.qf-role-form {
+  background-color: white;
+  margin: 20px;
+  box-sizing: border-box;
+  padding: 20px;
+  border-radius: 2px;
+  height: 100%;
+  .btn {
+    position: fixed;
+    bottom: 0;
+    left: 200px;
+    right: 0;
+    height: 60px;
+    border-top: 1px solid #eee;
+    text-align: center;
+    background-color: white;
+    transition: all 0.2s;
+    .ant-btn {
+      margin-top: 14px;
+    }
+  }
+}

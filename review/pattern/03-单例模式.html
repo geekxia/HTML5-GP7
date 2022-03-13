@@ -1,0 +1,23 @@
+<script>
+  // 单例模式
+  var Singleton = function(name) {
+    this.name = name
+  }
+  // 静态方法
+  Singleton.createInstance = (function() {
+    var instance = null
+    return function(name) {
+      // 第一次创建实例
+      if (!instance)  {
+        instance = new Singleton(name)
+        console.log('---')
+      }
+      return instance
+    }
+  })()
+
+  var zs = Singleton.createInstance('zhangsan')
+  var ls = Singleton.createInstance('lisi')
+  var ww = Singleton.createInstance('wangwu')
+
+</script>

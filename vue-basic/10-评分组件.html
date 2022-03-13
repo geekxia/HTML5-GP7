@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .qf-rate {
+      height: 20px;
+    }
+    .qf-rate span {
+      border: 1px solid #ccc;
+      float: left;
+      height: 100%;
+      width: 20px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    .qf-rate span.on {
+      background: orange;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    给小王打分：
+    <!-- <qf-rate :value='score' @input='score=$event'></qf-rate> -->
+    <qf-rate v-model='score'></qf-rate>
+
+    <!-- <input type="text" :value='name' @input='name=$event.target.value' /> -->
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+
+    // 父子组件通信：
+    // 1、当父组件需要向子组件传递数据时，我们使用自定义属性，在子组件使用props接收即可。
+      // 自定义属性，在子组件中必须使用props接收，否则用不了。
+    // 2、当子组件需要向父组件传递数据时，我们使用自定义事件，在子组件中使用$emit()触发并回传数据。
+      // 自定义事件，在子组件无须接收，可以直接用。
+
+    // “类表单”：但凡涉及到“父子组件通信”的组件，我们一般称之为“类表单”。v-model可以优化代码。
+
+    Vue.component('qf-rate', {
+      template: `
+      <div class='qf-rate'>
+        <span
+          v-for='i in 5'
+          :class='{"on": i<=value}'
+          @click='$emit("input", i)'
+        >
+        </span>
+      </div>
+      `,
+      props: {
+        value: { type: Number, required: false, default: 0 }
+      },
+      methods: {
+        // clickHandle(i) {
+        //   console.log('clicked', i)
+        //   this.$emit('input', i)
+        // }
+      },
+    })
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        score: 0
+      }
+    })
+  </script>
+
+</body>
+</html>

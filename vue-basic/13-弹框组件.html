@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  .qf-layer {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.8);
+  }
+  .qf-dialog {
+    position: absolute;
+    top: 15vh;
+    width: 50%;
+    left: 25%;
+    background: white;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 0 20px;
+  }
+  .header {
+    line-height: 60px;
+    font-size: 14px;
+    height: 60px;
+    overflow: hidden;
+    position: relative;
+  }
+  .header .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    height: 60px;
+  }
+  .body {}
+  .footer {
+    padding-bottom: 20px;
+  }
+
+  .fade-enter-active {
+    animation: dialog-fade-in .3s;
+  }
+
+  .fade-leave-active {
+    animation: dialog-fade-out .3s;
+  }
+  @keyframes dialog-fade-in {
+    0% {
+      transform: translate3d(0, -20px, 0);
+      opacity: 0;
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+  @keyframes dialog-fade-out {
+    0% {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+    100% {
+      transform: translate3d(0, -20px, 0);
+      opacity: 0;
+    }
+  }
+  </style>
+</head>
+<body>
+
+  <div id="app" style='position:absolute;top:0;bottom:0;right:0;left:0;overflow:scroll;'>
+    <button @click='show=true'>删除用户</button>
+    <qf-dialog
+      :visible='show'
+      @close='closeHandle'
+      title='危险'
+      width='60%'
+      top='20vh'
+      center
+      @open='openHandle'
+    >
+      <!-- <template #title>
+        <div style='color:red;'>警告</div>
+      </template> -->
+      <template>
+        <h6>你确定要删除吗？</h6>
+      </template>
+      <template #footer>
+        <div>
+          <button>确定</button>
+        </div>
+      </template>
+    </qf-dialog>
+
+    <br v-for='i in 100'/>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+  <script>
+    Vue.component('qf-dialog', {
+      template: `
+      <transition name='fade'>
+        <div class='qf-layer' v-if='visible'>
+          <div
+            class='qf-dialog'
+            :style='{width,left,top}'
+          >
+            <div class='header'>
+              <div :style='{textAlign}'>
+                <slot name='title'>
+                  <div v-text='title'></div>
+                </slot>
+              </div>
+              <div class='close' @click='$emit("close")'>X</div>
+            </div>
+            <div class='body'>
+              <slot></slot>
+            </div>
+            <div class='footer' :style='{textAlign}'>
+              <slot name='footer'></slot>
+            </div>
+          </div>
+        </div>
+      </transition>
+      `,
+      props: {
+        visible: { type: Boolean, required: false, default: false },
+        title: { type: String, required: false, default: '标题' },
+        width: { type: String, required: false, default: '50%' },
+        top: { type: String, required: false, default: '15vh' },
+        center: { type: Boolean, required: false, default: false }
+      },
+      computed: {
+        left() {
+          const w = (100-Number(this.width.replace('%','')))/2
+          return w+'%'
+        },
+        textAlign() {
+          return this.center?"center":"left"
+        }
+      },
+      watch: {
+        visible() {
+          if(this.visible) {
+            this.$parent.$root.$el.addEventListener('scroll', this.scrollHandle)
+            this.$emit('open')
+          }else{
+            // this.$parent.$root.$el.removeEventListener('scroll', this.scrollHandle)
+            this.$emit('close')
+          }
+        }
+      },
+      mounted() {},
+      methods: {
+        scrollHandle(ev) { console.log('页面滚动了',  ev.srcElement.scrollTop) }
+      }
+    })
+  </script>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        show: false
+      },
+      methods: {
+        closeHandle() {
+          this.show = false
+        },
+        openHandle() {
+          console.log('弹框已开发，准备做点')
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>

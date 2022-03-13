@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    姓名：<input type="text" v-model.trim='name' /><br>
+    幸运色：<input type="color" v-model='lucky' /><br>
+    座右铭：<textarea cols="30" rows="3" v-model.trim.lazy='info'></textarea>
+    <br>
+
+    <!-- 当select可以 multiple时，v-model必须绑定一个数组 -->
+    学历：<select v-model='level'>
+      <option value=''>请选择</option>
+      <option
+        v-for='item in levelArr'
+        :value='item.value'
+        v-text='item.label'>
+      </option>
+    </select>
+    <br>
+
+    <!-- 在构建单选按钮组时，给它们添加相同的v-model，就可以变成“一组” -->
+    <!-- value的作用，用于v-model的双向绑定 -->
+    性别：<span v-for='item in genderArr'>
+      <input type="radio" :value='item.value' v-model='gender' />
+      <span v-text='item.label'></span>
+    </span>
+    <br>
+
+    <!-- 在构建复选框时，给它们添加相同的v-model，就可以变成“一组” -->
+    爱好：<span v-for='item in favArr'>
+      <input type="checkbox" :value='item.value' v-model='fav' />
+      <span v-text='item.label'></span>
+    </span>
+    <br>
+    <hr>
+
+    <!-- v-model='recieve'  等价于  :value='recieve' @input='recieve=$event.target.value'  -->
+    收件人：<input type="text" :value='recieve' @input='recieve=$event.target.value' />
+    <br>
+
+    选择支付：<span v-for='item in payArr'>
+      <input
+        type="radio"
+        :value='item.value'
+        :checked='pay===item.value'
+        @change='pay=$event.target.value'
+      />
+      <span v-text='item.label'></span>
+    </span>
+    <br>
+    就业方向：<span v-for='item in jobArr'>
+      <input
+        type="checkbox"
+        :value='item.value'
+        :checked='job.includes(item.value)'
+        @change='job=($event.target.checked?[...job,$event.target.value]:job.filter(ele=>ele!==$event.target.value))'
+      />
+      <span v-text='item.label'></span>
+    </span>
+    <br>
+
+    <!-- 不用v-model，实现一下select框的取值 -->
+    尺码：<select :value='size' @change='size=$event.target.value'>
+      <option v-for='item in sizeArr' :key='item.id' :value='item.value' v-text='item.label'></option>
+    </select>
+
+
+    <button @click='submit'>提交</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    // 表单：文本框、拾色器、多行文本框、下拉框、复选框、单选按钮组。
+    // 从组件化的角度，凡是会发生值的变化的组件，都可以被认为是表单。
+
+    // 如何理解v-model这个指令？
+
+    // 1、v-model是一种语法糖（一种比较好用的简写）。
+      // 对普通文本框来讲，v-model = v-bind:value + v-on:input。
+      // 对单选按钮组、复选框来讲，v-model = v-bind:checked + v-on:change。
+      // 对下拉框来讲，v-model = v-bind:value + v-on:change。
+
+    // 2、v-model，在组件化中应用非常广泛，用于父子组件通信。
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        name: '',
+        lucky: '#000000',
+        info: '',
+        levelArr: [
+          { id: 1, value: 'shuoshi', label: '硕士' },
+          { id: 2, value: 'benke', label: '本科' },
+          { id: 3, value: 'dazhuang', label: '大专' },
+          { id: 4, value: 'gaozhong', label: '高中' }
+        ],
+        level: '',
+        genderArr: [
+          { id: 1, value: 'man', label: '男' },
+          { id: 2, value: 'woman', label: '女' },
+          { id: 3, value: 'not', label: '保密' }
+        ],
+        gender: 'man',
+        favArr: [
+          { id: 1, value: 'basketball', label: '篮球' },
+          { id: 2, value: 'football', label: '足球' },
+          { id: 3, value: 'book', label: '读书' },
+          { id: 4, value: 'coding', label: '编程' },
+          { id: 5, value: 'running', label: '跑步' }
+        ],
+        fav: [],
+        recieve: '',
+        payArr: [
+          { id: 1, value: 'wechat', label: '微信支付' },
+          { id: 2, value: 'alipay', label: '支付宝支付' }
+        ],
+        pay: 'wechat',
+        jobArr: [
+          { id: 1, value: 'vue', label: 'Vue开发' },
+          { id: 2, value: 'react', label: 'React开发' },
+          { id: 3, value: 'rn', label: 'RN开发' },
+          { id: 4, value: 'app', label: '混合开发' }
+        ],
+        job: [],
+        sizeArr: [
+          { id: 1, value: 'M', label: '中码' },
+          { id: 2, value: 'L', label: '大码' },
+          { id: 3, value: 'XL', label: '超大码' }
+        ],
+        size: 'M'
+
+      },
+      methods: {
+        submit() {
+          const data = {
+            name: this.name,
+            lucky: this.lucky,
+            info: this.info,
+            level: this.level,
+            gender: this.gender,
+            fav: this.fav,
+            recieve: this.recieve,
+            size: this.size
+          }
+          console.log('提交', data)
+        }
+      }
+    })
+  </script>
+
+</body>
+</html>
